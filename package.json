@@ -1,0 +1,30 @@
+{
+  "name": "tokensoft_token_stacks",
+  "version": "0.0.0",
+  "author": {
+    "name": "pooleja",
+    "email": "james@tokensoft.io"
+  },
+  "repository": "https://github.com/tokensoft/tokensoft_token_stacks.git",
+  "private": true,
+  "engines": {
+    "node": ">=10"
+  },
+  "scripts": {
+    "test": "mocha",
+    "test:watch": "mocha --watch"
+  },
+  "devDependencies": {
+    "@types/node": "^10",
+    "typescript": "^3.5.2",
+    "ts-node": "^8.2.0",
+    "chai": "^4.2.0",
+    "@types/chai": "^4.1.7",
+    "mocha": "^6.1.4",
+    "@types/mocha": "^5.2.7"
+  },
+  "dependencies": {
+    "@blockstack/clarity": "^0.3.7",
+    "@blockstack/clarity-native-bin": "^0.3.7"
+  }
+}
