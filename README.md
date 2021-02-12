@@ -9,10 +9,7 @@ The following public functions are available similar to ERC20:
 * total-supply
 * balance-of
 * transfer
-* transfer-from
-* increase-allowance
-* decrease-allowance
-* allowance
+
 
 The following public functions are available similar to ERC721:
 * token-uri
