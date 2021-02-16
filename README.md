@@ -4,7 +4,7 @@
 The token attempts to implement the (currently in progress) SIP 10 standard.
 https://github.com/stacksgov/sips/pull/5
 
-With this token standard, it implements the "Standard Trait Definition for Non-Fungible Tokens".  This trait exposes functions for token metadata:
+This token standard implements the "Standard Trait Definition for Non-Fungible Tokens."  This trait exposes functions for token metadata:
 
 * name
 * symbol
@@ -38,7 +38,7 @@ A wallet should check the `detect-transfer-restriction` function to determine wh
 
 # Role Based Access Control
 
-The token has certain roles built into it to allow administrative actions.  1 or more principals can be granted each of the roles and a principal can be granted multiple roles.  The following roles are available:
+The token has certain roles built into it to allow administrative actions. One or more principals can be granted each of the roles and a principal can be granted multiple roles.  The following roles are available:
 
 * Owner
 * Minter
@@ -62,7 +62,7 @@ A principal with the `Burner` role can burn new tokens from any principal.  The 
 A principal with the `Revoker` role can move tokens from any principal to another principal.
 
 ### Blacklisting
-A principal with the `Blacklister` role can add or remove any principal to a black list.  Any transaction sending tokens `to` OR `from` a blacklisted account will be denied and the transaction will fail.
+A principal with the `Blacklister` role can add or remove any principal to a blacklist.  Any transaction sending tokens `to` OR `from` a blacklisted account will be denied and the transaction will fail.
 
 # Dev
 Install dependencies:
