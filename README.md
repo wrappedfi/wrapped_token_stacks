@@ -19,12 +19,16 @@ Finally, it defines the function for transferring tokens:
 
 * transfer
 
+This trait is defined in `ft-trait.clar`.
+
 # Token URI
 In addition to the standard metadata provided, an additional parameter has been added:
 
 * token-uri
 
 This parameter mimics the functionality found on the ERC721 standard.  The expectation is that a token owner can set this to reference an external URI that contains extra metadata about the token (such as logos, agreements, or other documentation)
+
+This trait is defined in `metadata-uri-token-trait.clar`.
 
 # Token Restrictions
 
@@ -35,6 +39,8 @@ The following public functions are available similar to ERC1404:
 If any restrictions are put into place that would prevent a transfer from succeeding, the standard `transfer` function would fail with a `u403` error code.  403 was chosen to mimic the `HTTP 403 Forbidden` status.
 
 A wallet should check the `detect-transfer-restriction` function to determine why the transfer was restricted, and then can return a human readable message found by calling `message-for-transfer-restriction` to the user to take corrective actions.
+
+This trait is defined in `restricted-token-trait.clar`.
 
 # Role Based Access Control
 

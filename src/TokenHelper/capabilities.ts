@@ -3,15 +3,15 @@ import { Client, Result } from '@blockstack/clarity';
 const TRANSFER_RESTRICTIONS = {
   SUCCESS: {
     errorCode: 0,
-    message: "No Restriction Detected"
+    message: '(ok u"No Restriction Detected")'
   },
   BLACKLIST: {
     errorCode: 1,
-    message: "Sender or recipient is on the blacklist and prevented from transacting"
+    message: '(ok u"Sender or recipient is on the blacklist and prevented from transacting")'
   },
   UNKNOWN: {
     errorCode: null,
-    message: "Unkown Error Code"
+    message: '(ok u"Unknown Error Code")'
   }
 }
 
@@ -204,7 +204,7 @@ const messageForRestriction = async (client: Client, errorCode: number) => {
   })
 
   const receipt = await client.submitQuery(query);
-  return Result.unwrapString(receipt, "utf8")
+  return Result.unwrap(receipt)
 }
 
 export default {

@@ -2,24 +2,18 @@ import { Client, Provider, ProviderRegistry, Result } from "@blockstack/clarity"
 import { assert } from "chai"
 import Accounts from './accounts'
 import TokenHelper from '../src/TokenHelper'
+import { createCheckAndDeploy } from "./setup"
 
 describe("Tokensoft Token contract test suite", () => {
-  let traitClient: Client
-  let tokensoftTokenClient: Client
   let provider: Provider
+  let tokensoftTokenClient: Client
 
   before(async () => {
     provider = await ProviderRegistry.createProvider()
-    traitClient = new Client(`${Accounts.alice}.ft-trait`, 'ft-trait', provider)    
-    tokensoftTokenClient = new Client(`${Accounts.alice}.tokensoft-token`, "tokensoft-token", provider)
-  })
-
-  it("should have a valid syntax and deploy", async () => {
-    await traitClient.checkContract()
-    await traitClient.deployContract()
-
-    await tokensoftTokenClient.checkContract()
-    await tokensoftTokenClient.deployContract()
+    await createCheckAndDeploy(`${Accounts.alice}.ft-trait`, 'ft-trait', provider)
+    await createCheckAndDeploy(`${Accounts.alice}.restricted-token-trait`, 'restricted-token-trait', provider)
+    await createCheckAndDeploy(`${Accounts.alice}.metadata-uri-token-trait`, 'metadata-uri-token-trait', provider)
+    tokensoftTokenClient = await createCheckAndDeploy(`${Accounts.alice}.tokensoft-token`, "tokensoft-token", provider)
   })
 
   it("should return name", async () => {

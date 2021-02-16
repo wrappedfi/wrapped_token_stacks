@@ -2,6 +2,12 @@
 ;; This can use sugared syntax in real deployment (unit tests do not allow)
 (impl-trait 'ST3J2GVMMM2R07ZFBJDWTYEYAR8FZH5WKDTFJ9AHA.ft-trait.ft-trait)
 
+;; ;; Implement the metadata URI trait
+(impl-trait 'ST3J2GVMMM2R07ZFBJDWTYEYAR8FZH5WKDTFJ9AHA.metadata-uri-token-trait.metadata-uri-token-trait)
+
+;; ;; Implement the token restriction trait
+(impl-trait 'ST3J2GVMMM2R07ZFBJDWTYEYAR8FZH5WKDTFJ9AHA.restricted-token-trait.restricted-token-trait)
+
 ;; Error returned for permission denied - stolen from http 403
 (define-constant PERMISSION_DENIED_ERROR u403)
 
@@ -169,10 +175,10 @@
 ;; Returns the user viewable string for a specific transfer restriction
 (define-read-only (message-for-restriction (restriction-code uint))
   (if (is-eq restriction-code RESTRICTION_NONE)
-    (ok "No Restriction Detected")
+    (ok u"No Restriction Detected")
     (if (is-eq restriction-code RESTRICTION_BLACKLIST)
-      (ok "Sender or recipient is on the blacklist and prevented from transacting")
-      (ok "Unkown Error Code"))))
+      (ok u"Sender or recipient is on the blacklist and prevented from transacting")
+      (ok u"Unknown Error Code"))))
 
 ;; Constructor
 ;; --------------------------------------------------------------------------
