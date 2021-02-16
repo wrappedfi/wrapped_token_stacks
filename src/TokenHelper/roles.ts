@@ -3,7 +3,9 @@ import { Client, Result } from '@blockstack/clarity';
 const ROLE_TYPES = {
   OWNER : 0,
   MINTER : 1,
-  BURNER: 2
+  BURNER: 2,
+  REVOKER: 3,
+  BLACKLISTER: 4
 }
 
 /**

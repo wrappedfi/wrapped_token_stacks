@@ -2,6 +2,9 @@
 ;; This can use sugared syntax in real deployment (unit tests do not allow)
 (impl-trait 'ST3J2GVMMM2R07ZFBJDWTYEYAR8FZH5WKDTFJ9AHA.ft-trait.ft-trait)
 
+;; Error returned for permission denied - stolen from http 403
+(define-constant PERMISSION_DENIED_ERROR u403)
+
 ;; Constants defined to be changed when deploying new instances
 (define-constant NAME "Tokensoft Token")
 (define-constant SYMBOL "TSFT")
@@ -15,8 +18,7 @@
 
 ;; Get the token balance of the specified owner in base units
 (define-read-only (balance-of (owner principal))
-  (begin
-    (ok (ft-get-balance tokensoft-token owner))))
+  (ok (ft-get-balance tokensoft-token owner)))
 
 ;; Returns the token name
 (define-read-only (name)
@@ -42,11 +44,11 @@
 ;; The originator of the transaction (tx-sender) must be the 'sender' principal
 ;; Smart contracts can move tokens from their own address by calling transfer with the 'as-contract' modifier to override the tx-sender.
 (define-public (transfer (amount uint) (sender principal) (recipient principal))
-  (if (is-eq (detect-transfer-restriction amount sender recipient) u0)
+  (if (is-eq (unwrap-panic (detect-transfer-restriction amount sender recipient)) u0)
     (if (is-eq tx-sender sender)
       (ft-transfer? tokensoft-token amount sender recipient)
       (err u4))
-    (err (detect-transfer-restriction amount sender recipient)))) ;; TODO: figure out how to not call this twice
+    (err PERMISSION_DENIED_ERROR))) ;; TODO: get feedback on how to handle error codes
 
 
 ;; Role Based Access Control
@@ -59,12 +61,17 @@
 
 ;; Each role will have a mapping of principal to boolean.  A true "allowed" in the mapping indicates that the principal has the role.
 ;; Each role will have special permissions to modify or manage specific capabilities in the contract.
+;; Note that adding/removing roles could be optimized by having just 1 function, but since this is sensitive functionality, it was split
+;;    into 2 separate functions to make it explicit.
 ;; See the Readme about more details on the RBAC setup.
 (define-map roles { role: uint, account: principal } { allowed: bool })
 
 ;; Checks if an account has the specified role
 (define-read-only (has-role (role-to-check uint) (principal-to-check principal))
-  (if (is-eq (default-to false (get allowed (map-get? roles {role: role-to-check, account: principal-to-check}))) true )
+  (if 
+    (is-eq 
+      (default-to false (get allowed (map-get? roles {role: role-to-check, account: principal-to-check}))) 
+      true )
     true
     false))
 
@@ -74,7 +81,7 @@
    ;; Check the contract-caller to verify they have the owner role
    (if (has-role OWNER_ROLE contract-caller)
       (ok (map-set roles { role: role-to-add, account: principal-to-add } { allowed: true }))
-      (err false)))
+      (err PERMISSION_DENIED_ERROR)))
 
 ;; Remove a principal from the specified role
 ;; Only existing principals with the OWNER_ROLE can modify roles
@@ -83,8 +90,24 @@
    ;; Check the contract-caller to verify they have the owner role
    (if (has-role OWNER_ROLE contract-caller)
       (ok (map-set roles { role: role-to-remove, account: principal-to-remove } { allowed: false }))
-      (err false)))
+      (err PERMISSION_DENIED_ERROR)))
 
+
+;; Token URI
+;; --------------------------------------------------------------------------
+
+;; Variable for URI storage
+(define-data-var uri (string-utf8 1024) u"")
+
+;; Public getter for the URI
+(define-read-only (token-uri)
+  (ok (var-get uri)))
+
+;; Setter for the URI - only the owner can set it
+(define-public (set-token-uri (updated-uri (string-utf8 1024)))
+  (if (has-role OWNER_ROLE contract-caller)
+    (ok (var-set uri updated-uri))
+    (err PERMISSION_DENIED_ERROR)))
 
 ;; Minting and Burning
 ;; --------------------------------------------------------------------------
@@ -94,14 +117,14 @@
 (define-public (mint-tokens (mint-amount uint) (mint-to principal) )
   (if (has-role MINTER_ROLE contract-caller)
     (ft-mint? tokensoft-token mint-amount mint-to)
-    (err u4))) ;; TODO: Figure out what error code should be used for permission errors
+    (err PERMISSION_DENIED_ERROR)))
 
 ;; Mint tokens to the target address
 ;; Only existing principals with the MINTER_ROLE can mint tokens
 (define-public (burn-tokens (burn-amount uint) (burn-from principal) )
   (if (has-role BURNER_ROLE contract-caller)
     (ft-burn? tokensoft-token burn-amount burn-from)
-    (err u4))) ;; TODO: Figure out what error code should be used for permission errors
+    (err PERMISSION_DENIED_ERROR)))
 
 
 ;; Revoking Tokens
@@ -112,7 +135,7 @@
 (define-public (revoke-tokens (revoke-amount uint) (revoke-from principal) (revoke-to principal) )
   (if (has-role REVOKER_ROLE contract-caller)
     (ft-transfer? tokensoft-token revoke-amount revoke-from revoke-to)
-    (err u4))) ;; TODO: Figure out what error code should be used for permission errors
+    (err PERMISSION_DENIED_ERROR)))
 
 
 ;; Blacklisting Principals
@@ -130,7 +153,7 @@
 (define-public (update-blacklisted (principal-to-update principal) (set-blacklisted bool))
   (if (has-role BLACKLISTER_ROLE contract-caller)
     (ok (map-set blacklist { account: principal-to-update } { blacklisted: set-blacklisted }))
-    (err u4))) ;; TODO: Figure out what error code should be used for permission errors  
+    (err PERMISSION_DENIED_ERROR)))
 
 ;; Transfer Restrictions
 ;; --------------------------------------------------------------------------
@@ -140,15 +163,16 @@
 ;; Checks to see if a transfer should be restricted.  If so returns an error code that specifies restriction type.
 (define-read-only (detect-transfer-restriction (amount uint) (sender principal) (recipient principal))
   (if (or (is-blacklisted sender) (is-blacklisted recipient))
-    RESTRICTION_BLACKLIST
-    RESTRICTION_NONE))
+    (ok RESTRICTION_BLACKLIST)
+    (ok RESTRICTION_NONE)))
 
+;; Returns the user viewable string for a specific transfer restriction
 (define-read-only (message-for-restriction (restriction-code uint))
   (if (is-eq restriction-code RESTRICTION_NONE)
-    "No Restriction Detected"
+    (ok "No Restriction Detected")
     (if (is-eq restriction-code RESTRICTION_BLACKLIST)
-      "Sender or recipient is on the blacklist and prevented from transacting"
-      "Unkown Error Code")))
+      (ok "Sender or recipient is on the blacklist and prevented from transacting")
+      (ok "Unkown Error Code"))))
 
 ;; Constructor
 ;; --------------------------------------------------------------------------

@@ -38,6 +38,12 @@ describe("Tokensoft Token contract test suite", () => {
     assert.equal(await TokenHelper.Meta.supply(tokensoftTokenClient), 0)
   })
 
+  it("should have a blank token URI by default", async () => {
+    // assert.equal(await TokenHelper.Meta.tokenUri(tokensoftTokenClient), "")
+    // Hack as unwrap library is not working correctly
+    assert.equal((await TokenHelper.Meta.tokenUri(tokensoftTokenClient)), "(ok u\"\")")
+  })
+
   after(async () => {
     await provider.close()
   })

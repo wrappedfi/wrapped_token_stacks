@@ -1,9 +1,9 @@
 import { Client, Provider, ProviderRegistry, Result } from "@blockstack/clarity"
 import { assert } from "chai"
-import Accounts from './accounts'
-import TokenHelper from '../src/TokenHelper'
+import Accounts from '../accounts'
+import TokenHelper from '../../src/TokenHelper'
 
-describe("Tokensoft Token role permissions", () => {
+describe("Tokensoft Token Owner role permissions", () => {
   let traitClient: Client
   let tokensoftTokenClient: Client
   let provider: Provider
@@ -23,6 +23,7 @@ describe("Tokensoft Token role permissions", () => {
   })
 
   it("should set alice to owner by default", async () => {
+    // Alice should be owner
     assert.equal(
       await TokenHelper.Roles.hasRole(
         tokensoftTokenClient, 
@@ -30,6 +31,7 @@ describe("Tokensoft Token role permissions", () => {
         Accounts.alice), 
       'true')
 
+    // Bob should not be an owner
     assert.equal(
       await TokenHelper.Roles.hasRole(
         tokensoftTokenClient, 
@@ -39,6 +41,7 @@ describe("Tokensoft Token role permissions", () => {
   })
 
   it("should allow alice to set bob as owner", async () => {
+    // Set it
     await TokenHelper.Roles.addToRole(
       tokensoftTokenClient,
       TokenHelper.Roles.ROLE_TYPES.OWNER,
@@ -46,6 +49,7 @@ describe("Tokensoft Token role permissions", () => {
       Accounts.alice
     )
 
+    // Verify
     assert.equal(
       await TokenHelper.Roles.hasRole(
         tokensoftTokenClient, 
@@ -55,6 +59,7 @@ describe("Tokensoft Token role permissions", () => {
   })
 
   it("should not allow carol to set dave as owner", async () => {
+    // Try to set it
     try {      
       await TokenHelper.Roles.addToRole(
         tokensoftTokenClient,
@@ -65,6 +70,7 @@ describe("Tokensoft Token role permissions", () => {
       assert.fail('should not allow owner update')
     }catch{}
     
+    // Verify it actually failed
     assert.equal(
       await TokenHelper.Roles.hasRole(
         tokensoftTokenClient, 
@@ -74,6 +80,7 @@ describe("Tokensoft Token role permissions", () => {
   })
 
   it("should allow alice to remove bob as owner", async () => {
+    // Verify he has the role
     assert.equal(
       await TokenHelper.Roles.hasRole(
         tokensoftTokenClient, 
@@ -81,6 +88,7 @@ describe("Tokensoft Token role permissions", () => {
         Accounts.bob), 
       'true')
 
+    // Remove it
     await TokenHelper.Roles.removeFromRole(
       tokensoftTokenClient,
       TokenHelper.Roles.ROLE_TYPES.OWNER,
@@ -88,6 +96,7 @@ describe("Tokensoft Token role permissions", () => {
       Accounts.alice
     )
 
+    // Verify it was removed
     assert.equal(
       await TokenHelper.Roles.hasRole(
         tokensoftTokenClient, 
@@ -97,6 +106,15 @@ describe("Tokensoft Token role permissions", () => {
   })
 
   it("should not allow carol to remove alice as owner", async () => {
+    // Verify the current state
+    assert.equal(
+      await TokenHelper.Roles.hasRole(
+        tokensoftTokenClient, 
+        TokenHelper.Roles.ROLE_TYPES.OWNER,
+        Accounts.alice), 
+      'true')
+
+    // Try to remove
     try {
       await TokenHelper.Roles.removeFromRole(
         tokensoftTokenClient,
@@ -107,6 +125,7 @@ describe("Tokensoft Token role permissions", () => {
       assert.fail('should not allow owner removal')
     }catch{}
     
+    // Verify it wasn't
     assert.equal(
       await TokenHelper.Roles.hasRole(
         tokensoftTokenClient, 
@@ -119,3 +138,4 @@ describe("Tokensoft Token role permissions", () => {
     await provider.close()
   })
 })
+
