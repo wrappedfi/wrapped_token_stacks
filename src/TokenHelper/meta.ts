@@ -65,6 +65,26 @@ const tokenUri = async (client: Client) => {
   return receipt.result
 }
 
+const initialize = async (client: Client, name: string, symbol: string, decimals: number, owner: string, sender: string) => {
+  const tx = client.createTransaction({
+    method: {
+      name: 'initialize',
+      args: [
+        `\"${name}\"`,
+        `\"${symbol}\"`,
+        `u${decimals}`,
+        `'${owner}`],
+    },
+  });
+  await tx.sign(sender);
+  const receipt = await client.submitTransaction(tx);
+  if (receipt.success) {
+    return true
+  }
+  
+  throw new Error(`initialize failed ${JSON.stringify(receipt, null, 2)}`);
+}
+
 const setTokenUri = async (client: Client, uri: string, sender: string) => {
   const tx = client.createTransaction({
     method: {
@@ -82,6 +102,7 @@ const setTokenUri = async (client: Client, uri: string, sender: string) => {
 }
 
 export default {
+  initialize,
   name,
   symbol,
   decimals,

@@ -13,7 +13,45 @@ describe("Tokensoft Token contract test suite", () => {
     await createCheckAndDeploy(`${Accounts.alice}.ft-trait`, 'ft-trait', provider)
     await createCheckAndDeploy(`${Accounts.alice}.restricted-token-trait`, 'restricted-token-trait', provider)
     await createCheckAndDeploy(`${Accounts.alice}.metadata-uri-token-trait`, 'metadata-uri-token-trait', provider)
-    tokensoftTokenClient = await createCheckAndDeploy(`${Accounts.alice}.tokensoft-token`, "tokensoft-token", provider)
+    tokensoftTokenClient = await createCheckAndDeploy(`${Accounts.alice}.tokensoft-token`, "tokensoft-token", provider)    
+  })
+
+  it("should initialize", async () => {
+
+    // Non deployer should not be able to call
+    try{
+      await TokenHelper.Meta.initialize(
+        tokensoftTokenClient,
+        "Tokensoft Token1",
+        "TSFT1",
+        8,
+        Accounts.alice,
+        Accounts.bob
+      )
+      assert.fail("Non deployer should fail")
+    }catch{}
+
+    await TokenHelper.Meta.initialize(
+      tokensoftTokenClient,
+      "Tokensoft Token",
+      "TSFT",
+      8,
+      Accounts.bob,
+      Accounts.alice
+    )
+
+    // A second call should fail
+    try{
+      await TokenHelper.Meta.initialize(
+        tokensoftTokenClient,
+        "Tokensoft Token2",
+        "TSFT2",
+        8,
+        Accounts.alice,
+        Accounts.alice
+      )
+      assert.fail("Second call should fail")
+    }catch{}
   })
 
   it("should return name", async () => {
@@ -36,6 +74,15 @@ describe("Tokensoft Token contract test suite", () => {
     // assert.equal(await TokenHelper.Meta.tokenUri(tokensoftTokenClient), "")
     // Hack as unwrap library is not working correctly
     assert.equal((await TokenHelper.Meta.tokenUri(tokensoftTokenClient)), "(ok u\"\")")
+  })
+
+  it("should have set bob as owner", async () => {    
+    assert.equal(
+      await TokenHelper.Roles.hasRole(
+        tokensoftTokenClient, 
+        TokenHelper.Roles.ROLE_TYPES.OWNER,
+        Accounts.bob), 
+      'true')
   })
 
   after(async () => {

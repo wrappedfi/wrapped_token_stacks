@@ -14,6 +14,14 @@ describe("Tokensoft Token minting capability", () => {
     await createCheckAndDeploy(`${Accounts.alice}.restricted-token-trait`, 'restricted-token-trait', provider)
     await createCheckAndDeploy(`${Accounts.alice}.metadata-uri-token-trait`, 'metadata-uri-token-trait', provider)
     tokensoftTokenClient = await createCheckAndDeploy(`${Accounts.alice}.tokensoft-token`, "tokensoft-token", provider)
+    await TokenHelper.Meta.initialize(
+      tokensoftTokenClient,
+      "Tokensoft Token",
+      "TSFT",
+      8,
+      Accounts.alice,
+      Accounts.alice
+    )
   })
 
   it("should allow bob mint once he has been granted the role", async () => {

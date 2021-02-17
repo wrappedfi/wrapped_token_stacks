@@ -11,10 +11,14 @@
 ;; Error returned for permission denied - stolen from http 403
 (define-constant PERMISSION_DENIED_ERROR u403)
 
-;; Constants defined to be changed when deploying new instances
-(define-constant NAME "Tokensoft Token")
-(define-constant SYMBOL "TSFT")
-(define-constant DECIMALS u8)
+;; Data variables specific to the deployed token contract
+(define-data-var token-name (string-ascii 32) "")
+(define-data-var token-symbol (string-ascii 32) "")
+(define-data-var token-decimals uint u0)
+
+;; Track who deployed the token and whether it has been initialized
+(define-data-var deployer-principal principal tx-sender)
+(define-data-var is-initialized bool false)
 
 ;; Meta Read Only Functions for reading details about the contract - conforms to SIP 10
 ;; --------------------------------------------------------------------------
@@ -28,15 +32,15 @@
 
 ;; Returns the token name
 (define-read-only (name)
-  (ok NAME))
+  (ok (var-get token-name)))
 
 ;; Returns the symbol or "ticker" for this token
 (define-read-only (symbol)
-  (ok SYMBOL))
+  (ok (var-get token-symbol)))
 
-;; Returns the number of decimals used - 8 in this case - 100_000_000 base units is 1 TSFT token
+;; Returns the number of decimals used
 (define-read-only (decimals)
-  (ok DECIMALS))
+  (ok (var-get token-decimals)))
 
 ;; Returns the total number of tokens that currently exist
 (define-read-only (total-supply)
@@ -180,10 +184,23 @@
       (ok u"Sender or recipient is on the blacklist and prevented from transacting")
       (ok u"Unknown Error Code"))))
 
-;; Constructor
+
+;; Initialization
 ;; --------------------------------------------------------------------------
 
-;; Initialize the contract - the caller should be set to an owner by default
-(begin  
-  (map-set roles { role: OWNER_ROLE, account: tx-sender } { allowed: true })
-)
+;; Check to ensure that the same account that deployed the contract is initializing it
+;; Only allow this funtion to be called once by checking "is-initialized"
+(define-public (initialize (name-to-set (string-ascii 32)) (symbol-to-set (string-ascii 32) ) (decimals-to-set uint) (initial-owner principal))
+  (if 
+    (and 
+      (is-eq tx-sender (var-get deployer-principal))
+      (not (var-get is-initialized)))
+    (begin 
+      (var-set is-initialized true) ;; Set to true so that this can't be called again
+      (var-set token-name name-to-set)
+      (var-set token-symbol symbol-to-set)
+      (var-set token-decimals decimals-to-set)
+      (map-set roles { role: OWNER_ROLE, account: initial-owner } { allowed: true })
+      (ok true))
+    (err PERMISSION_DENIED_ERROR)))
+
