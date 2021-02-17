@@ -63,9 +63,9 @@ The token has certain roles built into it to allow administrative actions. One o
 * Revoker
 * Blacklister
 
-By default, the account that deploys the contract will be granted the `Owner` role.  The `Owner` role is the only role that can add or remove other accounts from roles.
+By default, the account specified in the `initialize` call will be granted the `Owner` role.  The `Owner` role is the only role that can add or remove other accounts from roles.
 
-NOTE!!! If all owners are removed then no other role administration can be performed.  Any time an owner removes themselves, great care must be taken to ensure another owner still exists.  Also, this means that all admin permissions can be irrevocably disabled by removing all roles from all principals.
+NOTE!!! If all owners are removed then no other role administration can be performed.  Any time an owner removes themselves, great care must be taken to ensure another owner still exists.  Also, this means that all admin functionality can be irrevocably disabled by removing all roles from all principals.
 
 # Administrative Capabilities
 
