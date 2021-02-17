@@ -42,6 +42,17 @@ A wallet should check the `detect-transfer-restriction` function to determine wh
 
 This trait is defined in `restricted-token-trait.clar`.
 
+# Initialization
+
+Each deployed token should have a different name, symbol, etc.  The principal that deploys the contract can call an `initialize` function on the contract to set all initial values.  This function can only be called once and will set the following:
+
+* Token Name
+* Token Symbol
+* Decimals
+* Initial Owner Principal
+
+The reason that these items are set dynamically is that once the contract has been audited, we don't want to accidentally make any changes to the source code that could affect the functionality.  Also, if this contract represents a registered security, it may be necessary that the deployer (e.g. Tokensoft) never holds the ownership role of the contract.
+
 # Role Based Access Control
 
 The token has certain roles built into it to allow administrative actions. One or more principals can be granted each of the roles and a principal can be granted multiple roles.  The following roles are available:
