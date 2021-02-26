@@ -7,7 +7,7 @@
     ;; Returns human readable string for a specific transfer restriction error code
     ;;  which is returned from (detect-transfer-restriction).
     ;; This is a convenience function for end user wallets.
-    (message-for-restriction (uint) (response (string-utf8 1024) uint))
+    (message-for-restriction (uint) (response (string-ascii 1024) uint))
   )
 )
 

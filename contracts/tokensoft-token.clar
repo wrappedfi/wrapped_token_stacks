@@ -24,7 +24,9 @@
 ;; --------------------------------------------------------------------------
 
 ;; Defines built in support functions for tokens used in this contract
+;; A second optional parameter can be added here to set an upper limit on max total-supply
 (define-fungible-token tokensoft-token)
+
 
 ;; Get the token balance of the specified owner in base units
 (define-read-only (balance-of (owner principal))
@@ -78,12 +80,7 @@
 
 ;; Checks if an account has the specified role
 (define-read-only (has-role (role-to-check uint) (principal-to-check principal))
-  (if 
-    (is-eq 
-      (default-to false (get allowed (map-get? roles {role: role-to-check, account: principal-to-check}))) 
-      true )
-    true
-    false))
+  (default-to false (get allowed (map-get? roles {role: role-to-check, account: principal-to-check}))))  
 
 ;; Add a principal to the specified role
 ;; Only existing principals with the OWNER_ROLE can modify roles
@@ -129,8 +126,8 @@
     (ft-mint? tokensoft-token mint-amount mint-to)
     (err PERMISSION_DENIED_ERROR)))
 
-;; Mint tokens to the target address
-;; Only existing principals with the MINTER_ROLE can mint tokens
+;; Burn tokens from the target address
+;; Only existing principals with the BURNER_ROLE can mint tokens
 (define-public (burn-tokens (burn-amount uint) (burn-from principal) )
   (if (has-role BURNER_ROLE contract-caller)
     (ft-burn? tokensoft-token burn-amount burn-from)
@@ -179,10 +176,10 @@
 ;; Returns the user viewable string for a specific transfer restriction
 (define-read-only (message-for-restriction (restriction-code uint))
   (if (is-eq restriction-code RESTRICTION_NONE)
-    (ok u"No Restriction Detected")
+    (ok "No Restriction Detected")
     (if (is-eq restriction-code RESTRICTION_BLACKLIST)
-      (ok u"Sender or recipient is on the blacklist and prevented from transacting")
-      (ok u"Unknown Error Code"))))
+      (ok "Sender or recipient is on the blacklist and prevented from transacting")
+      (ok "Unknown Error Code"))))
 
 
 ;; Initialization
