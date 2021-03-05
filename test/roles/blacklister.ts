@@ -12,7 +12,6 @@ describe("Tokensoft Token Blacklister role permissions", () => {
     provider = await ProviderRegistry.createProvider()
     await createCheckAndDeploy(`${Accounts.alice}.ft-trait`, 'ft-trait', provider)
     await createCheckAndDeploy(`${Accounts.alice}.restricted-token-trait`, 'restricted-token-trait', provider)
-    await createCheckAndDeploy(`${Accounts.alice}.metadata-uri-token-trait`, 'metadata-uri-token-trait', provider)
     tokensoftTokenClient = await createCheckAndDeploy(`${Accounts.alice}.tokensoft-token`, "tokensoft-token", provider)
     await TokenHelper.Meta.initialize(
       tokensoftTokenClient,

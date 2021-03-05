@@ -6,29 +6,23 @@ https://github.com/stacksgov/sips/pull/5
 
 This token standard implements the "Standard Trait Definition for Non-Fungible Tokens."  This trait exposes functions for token metadata:
 
-* name
-* symbol
-* decimals
+* get-name
+* get-symbol
+* get-decimals
+* get-token-uri
+
+The `get-token-uri` method mimics the functionality found on the ERC721 standard.  The expectation is that a token owner can set this to reference an external URI that contains extra metadata about the token (such as logos, agreements, or other documentation)
 
 In addition to metadata, it exposes functions for querying the current total supply of the token and the balance for a specific account:
 
-* balance-of
-* total-supply
+* get-balance-of
+* get-total-supply
 
 Finally, it defines the function for transferring tokens:
 
 * transfer
 
 This trait is defined in `ft-trait.clar`.
-
-# Token URI
-In addition to the standard metadata provided, an additional parameter has been added:
-
-* token-uri
-
-This parameter mimics the functionality found on the ERC721 standard.  The expectation is that a token owner can set this to reference an external URI that contains extra metadata about the token (such as logos, agreements, or other documentation)
-
-This trait is defined in `metadata-uri-token-trait.clar`.
 
 # Token Restrictions
 

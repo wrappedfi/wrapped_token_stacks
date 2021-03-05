@@ -12,7 +12,6 @@ describe("Tokensoft Token URI capability", () => {
     provider = await ProviderRegistry.createProvider()
     await createCheckAndDeploy(`${Accounts.alice}.ft-trait`, 'ft-trait', provider)
     await createCheckAndDeploy(`${Accounts.alice}.restricted-token-trait`, 'restricted-token-trait', provider)
-    await createCheckAndDeploy(`${Accounts.alice}.metadata-uri-token-trait`, 'metadata-uri-token-trait', provider)
     tokensoftTokenClient = await createCheckAndDeploy(`${Accounts.alice}.tokensoft-token`, "tokensoft-token", provider)
     await TokenHelper.Meta.initialize(
       tokensoftTokenClient,
@@ -25,7 +24,7 @@ describe("Tokensoft Token URI capability", () => {
   })
 
   it("should allow bob to update the uri one he has been granted the role", async () => {
-    assert.equal((await TokenHelper.Meta.tokenUri(tokensoftTokenClient)), "(ok u\"\")")
+    assert.equal((await TokenHelper.Meta.tokenUri(tokensoftTokenClient)), "(ok (some u\"\"))")
     
     try {
       await TokenHelper.Meta.setTokenUri(
@@ -51,7 +50,7 @@ describe("Tokensoft Token URI capability", () => {
     )
 
     // Verify
-    assert.equal((await TokenHelper.Meta.tokenUri(tokensoftTokenClient)), "(ok u\"TOKENSOFT_TOKEN\")")
+    assert.equal((await TokenHelper.Meta.tokenUri(tokensoftTokenClient)), "(ok (some u\"TOKENSOFT_TOKEN\"))")
 
     // Update it again with Alice
     await TokenHelper.Meta.setTokenUri(
@@ -60,7 +59,7 @@ describe("Tokensoft Token URI capability", () => {
       Accounts.alice
     )
 
-    assert.equal((await TokenHelper.Meta.tokenUri(tokensoftTokenClient)), "(ok u\"POOLE_PARTY_TOKEN\")")
+    assert.equal((await TokenHelper.Meta.tokenUri(tokensoftTokenClient)), "(ok (some u\"POOLE_PARTY_TOKEN\"))")
 
     // Update it again with Alice
     await TokenHelper.Meta.setTokenUri(
@@ -69,7 +68,7 @@ describe("Tokensoft Token URI capability", () => {
       Accounts.alice
     )
 
-    assert.equal((await TokenHelper.Meta.tokenUri(tokensoftTokenClient)), "(ok u\"https://www.tokensoft.io/test?param=asdfasdf&param2=1235\")")
+    assert.equal((await TokenHelper.Meta.tokenUri(tokensoftTokenClient)), "(ok (some u\"https://www.tokensoft.io/test?param=asdfasdf&param2=1235\"))")
   })
 
 

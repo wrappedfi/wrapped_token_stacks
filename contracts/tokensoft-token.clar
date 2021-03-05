@@ -2,9 +2,6 @@
 ;; This can use sugared syntax in real deployment (unit tests do not allow)
 (impl-trait 'ST3J2GVMMM2R07ZFBJDWTYEYAR8FZH5WKDTFJ9AHA.ft-trait.ft-trait)
 
-;; ;; Implement the metadata URI trait
-(impl-trait 'ST3J2GVMMM2R07ZFBJDWTYEYAR8FZH5WKDTFJ9AHA.metadata-uri-token-trait.metadata-uri-token-trait)
-
 ;; ;; Implement the token restriction trait
 (impl-trait 'ST3J2GVMMM2R07ZFBJDWTYEYAR8FZH5WKDTFJ9AHA.restricted-token-trait.restricted-token-trait)
 
@@ -27,23 +24,23 @@
 (define-fungible-token tokensoft-token)
 
 ;; Get the token balance of the specified owner in base units
-(define-read-only (balance-of (owner principal))
+(define-read-only (get-balance-of (owner principal))
   (ok (ft-get-balance tokensoft-token owner)))
 
 ;; Returns the token name
-(define-read-only (name)
+(define-read-only (get-name)
   (ok (var-get token-name)))
 
 ;; Returns the symbol or "ticker" for this token
-(define-read-only (symbol)
+(define-read-only (get-symbol)
   (ok (var-get token-symbol)))
 
 ;; Returns the number of decimals used
-(define-read-only (decimals)
+(define-read-only (get-decimals)
   (ok (var-get token-decimals)))
 
 ;; Returns the total number of tokens that currently exist
-(define-read-only (total-supply)
+(define-read-only (get-total-supply)
   (ok (ft-get-supply tokensoft-token)))
 
 
@@ -107,14 +104,14 @@
 ;; --------------------------------------------------------------------------
 
 ;; Variable for URI storage
-(define-data-var uri (string-utf8 1024) u"")
+(define-data-var uri (string-utf8 256) u"")
 
 ;; Public getter for the URI
-(define-read-only (token-uri)
-  (ok (var-get uri)))
+(define-read-only (get-token-uri)
+  (ok (some (var-get uri))))
 
 ;; Setter for the URI - only the owner can set it
-(define-public (set-token-uri (updated-uri (string-utf8 1024)))
+(define-public (set-token-uri (updated-uri (string-utf8 256)))
   (if (has-role OWNER_ROLE contract-caller)
     (ok (var-set uri updated-uri))
     (err PERMISSION_DENIED_ERROR)))

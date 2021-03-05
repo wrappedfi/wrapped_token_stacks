@@ -4,18 +4,23 @@
     (transfer (uint principal principal) (response bool uint))
 
     ;; the human readable name of the token
-    (name () (response (string-ascii 32) uint))
+    (get-name () (response (string-ascii 32) uint))
 
     ;; the ticker symbol, or empty if none
-    (symbol () (response (string-ascii 32) uint))
+    (get-symbol () (response (string-ascii 32) uint))
 
     ;; the number of decimals used, e.g. 6 would mean 1_000_000 represents 1 token
-    (decimals () (response uint uint))
+    (get-decimals () (response uint uint))
 
     ;; the balance of the passed principal
-    (balance-of (principal) (response uint uint))
+    (get-balance-of (principal) (response uint uint))
 
     ;; the current total supply (which does not need to be a constant)
-    (total-supply () (response uint uint))
+    (get-total-supply () (response uint uint))
+
+    ;; Gets a URI string that will point to additional metadata about
+    ;; the token.
+    ;; This can be used for metadata, extra detailed information, investor docs, etc
+    (get-token-uri () (response (optional (string-utf8 256)) uint))
   )
 )
