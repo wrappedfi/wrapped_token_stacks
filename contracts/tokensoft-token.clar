@@ -24,7 +24,9 @@
 ;; --------------------------------------------------------------------------
 
 ;; Defines built in support functions for tokens used in this contract
+;; A second optional parameter can be added here to set an upper limit on max total-supply
 (define-fungible-token tokensoft-token)
+
 
 ;; Get the token balance of the specified owner in base units
 (define-read-only (balance-of (owner principal))
@@ -54,11 +56,10 @@
 ;; The originator of the transaction (tx-sender) must be the 'sender' principal
 ;; Smart contracts can move tokens from their own address by calling transfer with the 'as-contract' modifier to override the tx-sender.
 (define-public (transfer (amount uint) (sender principal) (recipient principal))
-  (if (is-eq (unwrap-panic (detect-transfer-restriction amount sender recipient)) u0)
-    (if (is-eq tx-sender sender)
-      (ft-transfer? tokensoft-token amount sender recipient)
-      (err u4))
-    (err PERMISSION_DENIED_ERROR))) ;; TODO: get feedback on how to handle error codes
+  (begin
+    (try! (detect-transfer-restriction amount sender recipient)) ;; Ensure there is no restriction
+    (asserts! (is-eq tx-sender sender) (err u4)) ;; Ensure the originator is the sender principal
+    (ft-transfer? tokensoft-token amount sender recipient))) ;; Transfer
 
 
 ;; Role Based Access Control
@@ -78,29 +79,24 @@
 
 ;; Checks if an account has the specified role
 (define-read-only (has-role (role-to-check uint) (principal-to-check principal))
-  (if 
-    (is-eq 
-      (default-to false (get allowed (map-get? roles {role: role-to-check, account: principal-to-check}))) 
-      true )
-    true
-    false))
+  (default-to false (get allowed (map-get? roles {role: role-to-check, account: principal-to-check}))))  
 
 ;; Add a principal to the specified role
 ;; Only existing principals with the OWNER_ROLE can modify roles
-(define-public (add-principal-to-role (role-to-add uint) (principal-to-add principal))
-   ;; Check the contract-caller to verify they have the owner role
-   (if (has-role OWNER_ROLE contract-caller)
-      (ok (map-set roles { role: role-to-add, account: principal-to-add } { allowed: true }))
-      (err PERMISSION_DENIED_ERROR)))
-
+(define-public (add-principal-to-role (role-to-add uint) (principal-to-add principal))   
+   (begin
+    ;; Check the contract-caller to verify they have the owner role
+    (asserts! (has-role OWNER_ROLE contract-caller) (err PERMISSION_DENIED_ERROR))
+    (ok (map-set roles { role: role-to-add, account: principal-to-add } { allowed: true }))))
+   
 ;; Remove a principal from the specified role
 ;; Only existing principals with the OWNER_ROLE can modify roles
 ;; WARN: Removing all owners will irrevocably lose all ownership permissions
-(define-public (remove-principal-from-role (role-to-remove uint) (principal-to-remove principal))
-   ;; Check the contract-caller to verify they have the owner role
-   (if (has-role OWNER_ROLE contract-caller)
-      (ok (map-set roles { role: role-to-remove, account: principal-to-remove } { allowed: false }))
-      (err PERMISSION_DENIED_ERROR)))
+(define-public (remove-principal-from-role (role-to-remove uint) (principal-to-remove principal))   
+   (begin
+    ;; Check the contract-caller to verify they have the owner role
+    (asserts! (has-role OWNER_ROLE contract-caller) (err PERMISSION_DENIED_ERROR))
+    (ok (map-set roles { role: role-to-remove, account: principal-to-remove } { allowed: false }))))
 
 
 ;; Token URI
@@ -115,9 +111,9 @@
 
 ;; Setter for the URI - only the owner can set it
 (define-public (set-token-uri (updated-uri (string-utf8 1024)))
-  (if (has-role OWNER_ROLE contract-caller)
-    (ok (var-set uri updated-uri))
-    (err PERMISSION_DENIED_ERROR)))
+  (begin
+    (asserts! (has-role OWNER_ROLE contract-caller) (err PERMISSION_DENIED_ERROR))
+    (ok (var-set uri updated-uri))))
 
 ;; Minting and Burning
 ;; --------------------------------------------------------------------------
@@ -125,16 +121,16 @@
 ;; Mint tokens to the target address
 ;; Only existing principals with the MINTER_ROLE can mint tokens
 (define-public (mint-tokens (mint-amount uint) (mint-to principal) )
-  (if (has-role MINTER_ROLE contract-caller)
-    (ft-mint? tokensoft-token mint-amount mint-to)
-    (err PERMISSION_DENIED_ERROR)))
+  (begin
+    (asserts! (has-role MINTER_ROLE contract-caller) (err PERMISSION_DENIED_ERROR))
+    (ft-mint? tokensoft-token mint-amount mint-to)))
 
-;; Mint tokens to the target address
-;; Only existing principals with the MINTER_ROLE can mint tokens
+;; Burn tokens from the target address
+;; Only existing principals with the BURNER_ROLE can mint tokens
 (define-public (burn-tokens (burn-amount uint) (burn-from principal) )
-  (if (has-role BURNER_ROLE contract-caller)
-    (ft-burn? tokensoft-token burn-amount burn-from)
-    (err PERMISSION_DENIED_ERROR)))
+  (begin
+    (asserts! (has-role BURNER_ROLE contract-caller) (err PERMISSION_DENIED_ERROR))
+    (ft-burn? tokensoft-token burn-amount burn-from)))
 
 
 ;; Revoking Tokens
@@ -143,10 +139,9 @@
 ;; Moves tokens from one account to another
 ;; Only existing principals with the REVOKER_ROLE can revoke tokens
 (define-public (revoke-tokens (revoke-amount uint) (revoke-from principal) (revoke-to principal) )
-  (if (has-role REVOKER_ROLE contract-caller)
-    (ft-transfer? tokensoft-token revoke-amount revoke-from revoke-to)
-    (err PERMISSION_DENIED_ERROR)))
-
+  (begin
+    (asserts! (has-role REVOKER_ROLE contract-caller) (err PERMISSION_DENIED_ERROR))
+    (ft-transfer? tokensoft-token revoke-amount revoke-from revoke-to)))
 
 ;; Blacklisting Principals
 ;; --------------------------------------------------------------------------
@@ -161,9 +156,9 @@
 ;; Updates an account's blacklist status
 ;; Only existing principals with the BLACKLISTER_ROLE can update blacklist status
 (define-public (update-blacklisted (principal-to-update principal) (set-blacklisted bool))
-  (if (has-role BLACKLISTER_ROLE contract-caller)
-    (ok (map-set blacklist { account: principal-to-update } { blacklisted: set-blacklisted }))
-    (err PERMISSION_DENIED_ERROR)))
+  (begin
+    (asserts! (has-role BLACKLISTER_ROLE contract-caller) (err PERMISSION_DENIED_ERROR))
+    (ok (map-set blacklist { account: principal-to-update } { blacklisted: set-blacklisted }))))
 
 ;; Transfer Restrictions
 ;; --------------------------------------------------------------------------
@@ -173,16 +168,16 @@
 ;; Checks to see if a transfer should be restricted.  If so returns an error code that specifies restriction type.
 (define-read-only (detect-transfer-restriction (amount uint) (sender principal) (recipient principal))
   (if (or (is-blacklisted sender) (is-blacklisted recipient))
-    (ok RESTRICTION_BLACKLIST)
+    (err RESTRICTION_BLACKLIST)
     (ok RESTRICTION_NONE)))
 
 ;; Returns the user viewable string for a specific transfer restriction
 (define-read-only (message-for-restriction (restriction-code uint))
   (if (is-eq restriction-code RESTRICTION_NONE)
-    (ok u"No Restriction Detected")
+    (ok "No Restriction Detected")
     (if (is-eq restriction-code RESTRICTION_BLACKLIST)
-      (ok u"Sender or recipient is on the blacklist and prevented from transacting")
-      (ok u"Unknown Error Code"))))
+      (ok "Sender or recipient is on the blacklist and prevented from transacting")
+      (ok "Unknown Error Code"))))
 
 
 ;; Initialization
@@ -191,16 +186,13 @@
 ;; Check to ensure that the same account that deployed the contract is initializing it
 ;; Only allow this funtion to be called once by checking "is-initialized"
 (define-public (initialize (name-to-set (string-ascii 32)) (symbol-to-set (string-ascii 32) ) (decimals-to-set uint) (initial-owner principal))
-  (if 
-    (and 
-      (is-eq tx-sender (var-get deployer-principal))
-      (not (var-get is-initialized)))
-    (begin 
-      (var-set is-initialized true) ;; Set to true so that this can't be called again
-      (var-set token-name name-to-set)
-      (var-set token-symbol symbol-to-set)
-      (var-set token-decimals decimals-to-set)
-      (map-set roles { role: OWNER_ROLE, account: initial-owner } { allowed: true })
-      (ok true))
-    (err PERMISSION_DENIED_ERROR)))
+  (begin
+    (asserts! (is-eq tx-sender (var-get deployer-principal)) (err PERMISSION_DENIED_ERROR))
+    (asserts! (not (var-get is-initialized)) (err PERMISSION_DENIED_ERROR))
+    (var-set is-initialized true) ;; Set to true so that this can't be called again
+    (var-set token-name name-to-set)
+    (var-set token-symbol symbol-to-set)
+    (var-set token-decimals decimals-to-set)
+    (map-set roles { role: OWNER_ROLE, account: initial-owner } { allowed: true })
+    (ok true)))
 
