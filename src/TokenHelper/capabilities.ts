@@ -187,7 +187,12 @@ const detectTransferRestriction = async (client: Client, amount: number, sender:
   })
 
   const receipt = await client.submitQuery(query);
-  return Result.unwrapUInt(receipt)
+  const extracted = Result.extract(receipt)
+  let value = extracted.success ? extracted.result : extracted.error
+  value = value.replace('(ok u', '')
+  value = value.replace('(err u', '')
+  value = value.replace(')', '')
+  return Number(value)
 }
 
 /**
