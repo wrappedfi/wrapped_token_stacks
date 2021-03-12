@@ -12,7 +12,6 @@ describe("Tokensoft Token contract test suite", () => {
     provider = await ProviderRegistry.createProvider()
     await createCheckAndDeploy(`${Accounts.alice}.ft-trait`, 'ft-trait', provider)
     await createCheckAndDeploy(`${Accounts.alice}.restricted-token-trait`, 'restricted-token-trait', provider)
-    await createCheckAndDeploy(`${Accounts.alice}.metadata-uri-token-trait`, 'metadata-uri-token-trait', provider)
     tokensoftTokenClient = await createCheckAndDeploy(`${Accounts.alice}.tokensoft-token`, "tokensoft-token", provider)    
   })
 
@@ -73,7 +72,7 @@ describe("Tokensoft Token contract test suite", () => {
   it("should have a blank token URI by default", async () => {
     // assert.equal(await TokenHelper.Meta.tokenUri(tokensoftTokenClient), "")
     // Hack as unwrap library is not working correctly
-    assert.equal((await TokenHelper.Meta.tokenUri(tokensoftTokenClient)), "(ok u\"\")")
+    assert.equal((await TokenHelper.Meta.tokenUri(tokensoftTokenClient)), "(ok (some u\"\"))")
   })
 
   it("should have set bob as owner", async () => {    

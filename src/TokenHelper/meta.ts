@@ -8,7 +8,7 @@ const name = async (client: Client) => {
 
   const query = client.createQuery({
     method: {
-      name: 'name',
+      name: 'get-name',
       args: [],
     }
   })
@@ -22,7 +22,7 @@ const name = async (client: Client) => {
  * @param client 
  */
 const symbol = async (client: Client) => {
-  const query = client.createQuery({ method: { name: "symbol", args: [] } })
+  const query = client.createQuery({ method: { name: "get-symbol", args: [] } })
   const receipt = await client.submitQuery(query)
   return Result.unwrapString(receipt, "utf8")
 }
@@ -32,7 +32,7 @@ const symbol = async (client: Client) => {
  * @param client 
  */
 const decimals = async (client: Client) => {
-  const query = client.createQuery({ method: { name: "decimals", args: [] } })
+  const query = client.createQuery({ method: { name: "get-decimals", args: [] } })
   const receipt = await client.submitQuery(query)
   return Result.unwrapUInt(receipt)
 }
@@ -42,7 +42,7 @@ const decimals = async (client: Client) => {
  * @param client 
  */
 const supply = async (client: Client) => {
-  const query = client.createQuery({ method: { name: "total-supply", args: [] } })
+  const query = client.createQuery({ method: { name: "get-total-supply", args: [] } })
   const receipt = await client.submitQuery(query)
   return Result.unwrapUInt(receipt)
 }
@@ -54,13 +54,13 @@ const supply = async (client: Client) => {
  * @returns - amount in base units
  */
 const balanceOf = async (client: Client, principal: string) => {
-  const query = client.createQuery({ method: { name: "balance-of", args: [`'${principal}`] } })
+  const query = client.createQuery({ method: { name: "get-balance-of", args: [`'${principal}`] } })
   const receipt = await client.submitQuery(query)
   return Result.unwrapUInt(receipt)
 }
 
 const tokenUri = async (client: Client) => {
-  const query = client.createQuery({ method: { name: "token-uri", args: [] } })
+  const query = client.createQuery({ method: { name: "get-token-uri", args: [] } })
   const receipt = await client.submitQuery(query)
   return receipt.result
 }
