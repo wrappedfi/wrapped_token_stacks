@@ -84,6 +84,8 @@
    (begin
     ;; Check the contract-caller to verify they have the owner role
     (asserts! (has-role OWNER_ROLE contract-caller) (err PERMISSION_DENIED_ERROR))
+    ;; Print the action for any off chain watchers
+    (print { action: "add-principal-to-role", role-to-add: role-to-add, principal-to-add: principal-to-add })
     (ok (map-set roles { role: role-to-add, account: principal-to-add } { allowed: true }))))
    
 ;; Remove a principal from the specified role
@@ -93,6 +95,8 @@
    (begin
     ;; Check the contract-caller to verify they have the owner role
     (asserts! (has-role OWNER_ROLE contract-caller) (err PERMISSION_DENIED_ERROR))
+    ;; Print the action for any off chain watchers
+    (print { action: "remove-principal-from-role", role-to-remove: role-to-remove, principal-to-remove: principal-to-remove })
     (ok (map-set roles { role: role-to-remove, account: principal-to-remove } { allowed: false }))))
 
 
@@ -110,6 +114,8 @@
 (define-public (set-token-uri (updated-uri (string-utf8 256)))
   (begin
     (asserts! (has-role OWNER_ROLE contract-caller) (err PERMISSION_DENIED_ERROR))
+    ;; Print the action for any off chain watchers
+    (print { action: "set-token-uri", updated-uri: updated-uri })
     (ok (var-set uri updated-uri))))
 
 
@@ -121,6 +127,8 @@
 (define-public (mint-tokens (mint-amount uint) (mint-to principal) )
   (begin
     (asserts! (has-role MINTER_ROLE contract-caller) (err PERMISSION_DENIED_ERROR))
+    ;; Print the action for any off chain watchers
+    (print { action: "mint-tokens", mint-amount: mint-amount, mint-to: mint-to  })
     (ft-mint? tokensoft-token mint-amount mint-to)))
 
 ;; Burn tokens from the target address
@@ -128,6 +136,8 @@
 (define-public (burn-tokens (burn-amount uint) (burn-from principal) )
   (begin
     (asserts! (has-role BURNER_ROLE contract-caller) (err PERMISSION_DENIED_ERROR))
+    ;; Print the action for any off chain watchers
+    (print { action: "burn-tokens", burn-amount: burn-amount, burn-from : burn-from  })
     (ft-burn? tokensoft-token burn-amount burn-from)))
 
 
@@ -139,6 +149,8 @@
 (define-public (revoke-tokens (revoke-amount uint) (revoke-from principal) (revoke-to principal) )
   (begin
     (asserts! (has-role REVOKER_ROLE contract-caller) (err PERMISSION_DENIED_ERROR))
+    ;; Print the action for any off chain watchers
+    (print { action: "revoke-tokens", revoke-amount: revoke-amount, revoke-from: revoke-from, revoke-to: revoke-to })
     (ft-transfer? tokensoft-token revoke-amount revoke-from revoke-to)))
 
 ;; Blacklisting Principals
@@ -156,6 +168,8 @@
 (define-public (update-blacklisted (principal-to-update principal) (set-blacklisted bool))
   (begin
     (asserts! (has-role BLACKLISTER_ROLE contract-caller) (err PERMISSION_DENIED_ERROR))
+    ;; Print the action for any off chain watchers
+    (print { action: "update-blacklisted", principal-to-update: principal-to-update, set-blacklisted: set-blacklisted })
     (ok (map-set blacklist { account: principal-to-update } { blacklisted: set-blacklisted }))))
 
 ;; Transfer Restrictions
