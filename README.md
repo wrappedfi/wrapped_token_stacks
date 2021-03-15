@@ -4,7 +4,7 @@
 The token attempts to implement the (currently in progress) SIP 10 standard.
 https://github.com/stacksgov/sips/pull/5
 
-This token standard implements the "Standard Trait Definition for Non-Fungible Tokens."  This trait exposes functions for token metadata:
+This token standard implements the "Standard Trait Definition for Fungible Tokens."  This trait exposes functions for token metadata:
 
 * get-name
 * get-symbol
