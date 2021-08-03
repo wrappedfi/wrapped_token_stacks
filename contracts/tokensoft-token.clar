@@ -1,6 +1,6 @@
 ;; Implement the `ft-trait` trait defined in the `ft-trait` contract - SIP 10
 ;; This can use sugared syntax in real deployment (unit tests do not allow)
-(impl-trait 'ST3J2GVMMM2R07ZFBJDWTYEYAR8FZH5WKDTFJ9AHA.ft-trait.ft-trait)
+(impl-trait 'SP3FBR2AGK5H9QBDH3EEN6DF8EK8JY7RX8QJ5SVTE.sip-010-trait-ft-standard)
 
 ;; ;; Implement the token restriction trait
 (impl-trait 'ST3J2GVMMM2R07ZFBJDWTYEYAR8FZH5WKDTFJ9AHA.restricted-token-trait.restricted-token-trait)
@@ -26,7 +26,7 @@
 
 
 ;; Get the token balance of the specified owner in base units
-(define-read-only (get-balance-of (owner principal))
+(define-read-only (get-balance (owner principal))
   (ok (ft-get-balance tokensoft-token owner)))
 
 ;; Returns the token name
@@ -52,7 +52,7 @@
 ;; Transfers tokens to a recipient
 ;; The originator of the transaction (tx-sender) must be the 'sender' principal
 ;; Smart contracts can move tokens from their own address by calling transfer with the 'as-contract' modifier to override the tx-sender.
-(define-public (transfer (amount uint) (sender principal) (recipient principal))
+(define-public (transfer (amount uint) (sender principal) (recipient principal (optional (buff 34)))
   (begin
     (try! (detect-transfer-restriction amount sender recipient)) ;; Ensure there is no restriction
     (asserts! (is-eq tx-sender sender) (err u4)) ;; Ensure the originator is the sender principal

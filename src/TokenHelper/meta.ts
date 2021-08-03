@@ -54,7 +54,7 @@ const supply = async (client: Client) => {
  * @returns - amount in base units
  */
 const balanceOf = async (client: Client, principal: string) => {
-  const query = client.createQuery({ method: { name: "get-balance-of", args: [`'${principal}`] } })
+  const query = client.createQuery({ method: { name: "get-balance", args: [`'${principal}`] } })
   const receipt = await client.submitQuery(query)
   return Result.unwrapUInt(receipt)
 }
