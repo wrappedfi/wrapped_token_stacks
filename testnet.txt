@@ -1,0 +1,15 @@
+ST3DX3H4FEYZJZ586MFBS25ZW3HZDMEW9226Y059C - fttrait
+ST3DX3H4FEYZJZ586MFBS25ZW3HZDMEW9226Y059C.numerous-rose-tarantula
+
+ST3DX3H4FEYZJZ586MFBS25ZW3HZDMEW9226Y059C.curved-emerald-rhinoceros
+
+
+(impl-trait 'ST3DX3H4FEYZJZ586MFBS25ZW3HZDMEW9226Y059C.numerous-rose-tarantula)
+
+;; ;; Implement the token restriction trait
+(impl-trait 'ST3DX3H4FEYZJZ586MFBS25ZW3HZDMEW9226Y059C.curved-emerald-rhinoceros)
+
+(impl-trait 'SP3FBR2AGK5H9QBDH3EEN6DF8EK8JY7RX8QJ5SVTE.sip-010-trait-ft-standard)
+
+;; ;; Implement the token restriction trait
+(impl-trait 'ST3J2GVMMM2R07ZFBJDWTYEYAR8FZH5WKDTFJ9AHA.restricted-token-trait.restricted-token-trait)

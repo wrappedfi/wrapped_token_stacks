@@ -15,7 +15,7 @@ The `get-token-uri` method mimics the functionality found on the ERC721 standard
 
 In addition to metadata, it exposes functions for querying the current total supply of the token and the balance for a specific account:
 
-* get-balance-of
+* get-balance
 * get-total-supply
 
 Finally, it defines the function for transferring tokens:

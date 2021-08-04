@@ -1,0 +1,15 @@
+[project]
+name = "tokensoft_token_stacks"
+requirements = []
+
+[contracts.ft-trait]
+path = "contracts/ft-trait.clar"
+depends_on = []
+
+[contracts.restricted-token-trait]
+path = "contracts/restricted-token-trait.clar"
+depends_on = []
+
+[contracts.tokensoft-token]
+path = "contracts/tokensoft-token.clar"
+depends_on = ["ft-trait","restricted-token-trait"]
