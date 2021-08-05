@@ -12,4 +12,4 @@ depends_on = []
 
 [contracts.tokensoft-token]
 path = "contracts/tokensoft-token.clar"
-depends_on = ["ft-trait","restricted-token-trait"]
+depends_on = ["ft-trait", "restricted-token-trait"]

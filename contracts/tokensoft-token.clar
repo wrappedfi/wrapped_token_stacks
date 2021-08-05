@@ -1,9 +1,9 @@
 ;; Implement the `ft-trait` trait defined in the `ft-trait` contract - SIP 10
 ;; This can use sugared syntax in real deployment (unit tests do not allow)
-(impl-trait 'ST3DX3H4FEYZJZ586MFBS25ZW3HZDMEW9226Y059C.numerous-rose-tarantula)
+(impl-trait .ft-trait.ft-trait)
 
 ;; ;; Implement the token restriction trait
-(impl-trait 'ST3DX3H4FEYZJZ586MFBS25ZW3HZDMEW9226Y059C.curved-emerald-rhinoceros)
+(impl-trait .restricted-token-trait.restricted-token-trait)
 
 ;; Error returned for permission denied - stolen from http 403
 (define-constant PERMISSION_DENIED_ERROR u403)
@@ -52,11 +52,12 @@
 ;; Transfers tokens to a recipient
 ;; The originator of the transaction (tx-sender) must be the 'sender' principal
 ;; Smart contracts can move tokens from their own address by calling transfer with the 'as-contract' modifier to override the tx-sender.
-(define-public (transfer (amount uint) (sender principal) (recipient principal ) (optional (buff 34))
+
+(define-public (transfer (amount uint) (sender principal) (recipient principal ) (memo (optional (buff 34) )))
   (begin
     (try! (detect-transfer-restriction amount sender recipient)) ;; Ensure there is no restriction
     (asserts! (is-eq tx-sender sender) (err u4)) ;; Ensure the originator is the sender principal
-    (ft-transfer? tokensoft-token amount sender recipient)))) ;; Transfer
+    (ft-transfer? tokensoft-token amount sender recipient) ) ) ;; Transfer
 
 
 ;; Role Based Access Control
