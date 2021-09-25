@@ -1,7 +1,7 @@
-# Tokensoft Token on the Stacks Blockchain. 
+# Wrapped Token on the Stacks Blockchain. 
 
 
-The token attempts to implement the (currently in progress) SIP 10 standard.
+The token attempts to implement the SIP 10 standard.
 https://github.com/stacksgov/sips/pull/5
 
 This token standard implements the "Standard Trait Definition for Fungible Tokens."  This trait exposes functions for token metadata:
@@ -45,7 +45,7 @@ Each deployed token should have a different name, symbol, etc.  The principal th
 * Decimals
 * Initial Owner Principal
 
-The reason that these items are set dynamically is that once the contract has been audited, we don't want to accidentally make any changes to the source code that could affect the functionality.  Also, if this contract represents a registered security, it may be necessary that the deployer (e.g. Tokensoft) never holds the ownership role of the contract.
+The reason that these items are set dynamically is that once the contract has been audited, we don't want to accidentally make any changes to the source code that could affect the functionality.  Also, if this contract represents a registered security, it may be necessary that the deployer (e.g. Wrapped) never holds the ownership role of the contract.
 
 # Role Based Access Control
 

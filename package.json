@@ -1,11 +1,11 @@
 {
-  "name": "tokensoft_token_stacks",
+  "name": "wrapped_token_stacks",
   "version": "0.0.0",
   "author": {
     "name": "pooleja",
     "email": "james@tokensoft.io"
   },
-  "repository": "https://github.com/tokensoft/tokensoft_token_stacks.git",
+  "repository": "https://github.com/tokensoft/wrapped_token_stacks.git",
   "private": true,
   "engines": {
     "node": ">=10"
