@@ -22,12 +22,12 @@
 
 ;; Defines built in support functions for tokens used in this contract
 ;; A second optional parameter can be added here to set an upper limit on max total-supply
-(define-fungible-token wrapped-token)
+(define-fungible-token wrapped-bitcoin)
 
 
 ;; Get the token balance of the specified owner in base units
 (define-read-only (get-balance (owner principal))
-  (ok (ft-get-balance wrapped-token owner)))
+  (ok (ft-get-balance wrapped-bitcoin owner)))
 
 ;; Returns the token name
 (define-read-only (get-name)
@@ -43,7 +43,7 @@
 
 ;; Returns the total number of tokens that currently exist
 (define-read-only (get-total-supply)
-  (ok (ft-get-supply wrapped-token)))
+  (ok (ft-get-supply wrapped-bitcoin)))
 
 
 ;; Write function to transfer tokens between accounts - conforms to SIP 10
@@ -58,7 +58,7 @@
     (try! (detect-transfer-restriction amount sender recipient)) ;; Ensure there is no restriction
     (asserts! (is-eq tx-sender sender) (err u4)) ;; Ensure the originator is the sender principal
     (print (default-to 0x memo))
-    (ft-transfer? wrapped-token amount sender recipient) ) ) ;; Transfer
+    (ft-transfer? wrapped-bitcoin amount sender recipient) ) ) ;; Transfer
 
 
 ;; Role Based Access Control
@@ -131,7 +131,7 @@
     (asserts! (has-role MINTER_ROLE contract-caller) (err PERMISSION_DENIED_ERROR))
     ;; Print the action for any off chain watchers
     (print { action: "mint-tokens", mint-amount: mint-amount, mint-to: mint-to  })
-    (ft-mint? wrapped-token mint-amount mint-to)))
+    (ft-mint? wrapped-bitcoin mint-amount mint-to)))
 
 ;; Burn tokens from the target address
 ;; Only existing principals with the BURNER_ROLE can mint tokens
@@ -140,7 +140,7 @@
     (asserts! (has-role BURNER_ROLE contract-caller) (err PERMISSION_DENIED_ERROR))
     ;; Print the action for any off chain watchers
     (print { action: "burn-tokens", burn-amount: burn-amount, burn-from : burn-from  })
-    (ft-burn? wrapped-token burn-amount burn-from)))
+    (ft-burn? wrapped-bitcoin burn-amount burn-from)))
 
 
 ;; Revoking Tokens
@@ -153,7 +153,7 @@
     (asserts! (has-role REVOKER_ROLE contract-caller) (err PERMISSION_DENIED_ERROR))
     ;; Print the action for any off chain watchers
     (print { action: "revoke-tokens", revoke-amount: revoke-amount, revoke-from: revoke-from, revoke-to: revoke-to })
-    (ft-transfer? wrapped-token revoke-amount revoke-from revoke-to)))
+    (ft-transfer? wrapped-bitcoin revoke-amount revoke-from revoke-to)))
 
 ;; Blacklisting Principals
 ;; --------------------------------------------------------------------------
