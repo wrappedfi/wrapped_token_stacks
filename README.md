@@ -39,7 +39,7 @@ Finally, it defines the function for transferring tokens:
 
 This trait is defined in `ft-trait.clar`.
 
-# Token Restrictions
+## Token Restrictions
 
 The following public functions are available similar to ERC1404:
 * detect-transfer-restriction
@@ -51,7 +51,7 @@ A wallet should check the `detect-transfer-restriction` function to determine wh
 
 This trait is defined in `restricted-token-trait.clar`.
 
-# Initialization
+## Initialization
 
 Each deployed token should have a different name, symbol, etc.  The principal that deploys the contract can call an `initialize` function on the contract to set all initial values.  This function can only be called once and will set the following:
 
@@ -62,7 +62,7 @@ Each deployed token should have a different name, symbol, etc.  The principal th
 
 The reason that these items are set dynamically is that once the contract has been audited, we don't want to accidentally make any changes to the source code that could affect the functionality.  Also, if this contract represents a registered security, it may be necessary that the deployer (e.g. Wrapped) never holds the ownership role of the contract.
 
-# Role Based Access Control
+## Role Based Access Control
 
 The token has certain roles built into it to allow administrative actions. One or more principals can be granted each of the roles and a principal can be granted multiple roles.  The following roles are available:
 
@@ -76,7 +76,7 @@ By default, the account specified in the `initialize` call will be granted the `
 
 NOTE!!! If all owners are removed then no other role administration can be performed.  Any time an owner removes themselves, great care must be taken to ensure another owner still exists.  Also, this means that all admin functionality can be irrevocably disabled by removing all roles from all principals.
 
-# Administrative Capabilities
+## Administrative Capabilities
 
 ### Minting
 A principal with the `Minter` role can mint new tokens to any principal.  The total supply of the token will be increased when new tokens are minted.
@@ -90,7 +90,7 @@ A principal with the `Revoker` role can move tokens from any principal to anothe
 ### Blacklisting
 A principal with the `Blacklister` role can add or remove any principal to a blacklist.  Any transaction sending tokens `to` OR `from` a blacklisted account will be denied and the transaction will fail.
 
-# Dev
+## Dev
 Install dependencies:
 ```
 yarn install
