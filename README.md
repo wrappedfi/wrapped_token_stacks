@@ -1,4 +1,18 @@
-# Wrapped Token on the Stacks Blockchain. 
+# Wrapped Token on the Stacks Blockchain
+
+<p align="center">
+  <a href="https://wrapped.com/">
+    <img src="https://i.imgur.com/qRrfeOx.png" alt="Wrapped logo" title="Go to
+wrapped.com" width="600" style="border:none;"/>
+  </a>
+</p>
+
+<!-- links & profiles -->
+
+[![Website](https://img.shields.io/badge/website-up-green)](https://wrapped.com)
+[![Blog](https://img.shields.io/badge/blog-up-green)](https://medium.com/wrapped/)
+[![Forums](https://img.shields.io/badge/forums-up-green)](https://forums.wrapped.com/)
+[![Twitter](https://img.shields.io/twitter/follow/wrappedfi?style=social)](https://twitter.com/wrappedfi)
 
 
 The token attempts to implement the SIP 10 standard.
@@ -85,3 +99,8 @@ yarn install
 ```
 yarn test
 ```
+
+## Questions? Feedback?
+
+Stop by our [Telegram](https://t.me/wrappedfi) or [send us an
+email](mailto:help@wrapped.com).
