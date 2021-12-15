@@ -14,6 +14,7 @@ wrapped.com" width="600" style="border:none;"/>
 [![Forums](https://img.shields.io/badge/forums-up-green)](https://forums.wrapped.com/)
 [![Twitter](https://img.shields.io/twitter/follow/wrappedfi?style=social)](https://twitter.com/wrappedfi)
 
+## About
 
 The token attempts to implement the SIP 10 standard.
 https://github.com/stacksgov/sips/pull/5
