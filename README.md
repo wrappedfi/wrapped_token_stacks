@@ -1,22 +1,35 @@
-# Wrapped Token on the Stacks Blockchain
-
 <p align="center">
   <a href="https://wrapped.com/">
-    <img src="https://i.imgur.com/qRrfeOx.png" alt="Wrapped logo" title="Go to
-wrapped.com" width="600" style="border:none;"/>
+    <img src="wrapped.png" alt="Wrapped.com" width="600" style="border:none;"/>
   </a>
 </p>
 
-<!-- links & profiles -->
+# Wrapped Token on the Stacks Blockchain
 
-[![Website](https://img.shields.io/badge/website-up-green)](https://wrapped.com)
-[![Blog](https://img.shields.io/badge/blog-up-green)](https://medium.com/wrapped/)
-[![Forums](https://img.shields.io/badge/forums-up-green)](https://forums.wrapped.com/)
-[![Twitter](https://img.shields.io/twitter/follow/wrappedfi?style=social)](https://twitter.com/wrappedfi)
+<!-- row 1 - status -->
+
+[![GitHub contributors](https://img.shields.io/github/contributors/wrappedfi/wrapped_token_stacks)](https://github.com/wrappedfi/wrapped_token_stacks/graphs/contributors)
+[![GitHub commit activity](https://img.shields.io/github/commit-activity/w/wrappedfi/wrapped_token_stacks)](https://github.com/wrappedfi/wrapped_token_stacks/graphs/contributors)
+[![GitHub Stars](https://img.shields.io/github/stars/wrappedfi/wrapped_token_stacks.svg)](https://github.com/wrappedfi/wrapped_token_stacks/stargazers)
+![GitHub repo size](https://img.shields.io/github/repo-size/wrappedfi/wrapped_token_stacks)
+[![GitHub](https://img.shields.io/github/license/wrappedfi/wrapped_token_stacks?color=blue)](https://github.com/wrappedfi/wrapped_token_stacks/blob/master/LICENSE)
+
+<!-- row 2 - links & profiles -->
+
+[![Website wrapped.com](https://img.shields.io/website-up-down-green-red/https/wrapped.com.svg)](https://wrapped.com)
+[![Blog](https://img.shields.io/badge/blog-up-green)](http://medium.com/wrapped)
+[![Docs](https://img.shields.io/badge/docs-up-green)](https://docs.wrapped.com/)
+[![Twitter WrappedFi](https://img.shields.io/twitter/follow/wrappedfi?style=social)](https://twitter.com/wrappedfi)
+
+<!-- row 3 - detailed status -->
+
+[![GitHub pull requests by-label](https://img.shields.io/github/issues-pr-raw/wrappedfi/wrapped_token_stacks)](https://github.com/wrappedfi/wrapped_token_stacks/pulls)
+[![GitHub Issues](https://img.shields.io/github/issues-raw/wrappedfi/wrapped_token_stacks.svg)](https://github.com/wrappedfi/wrapped_token_stacks/issues)
+
 
 ## About
 
-The token attempts to implement the SIP 10 standard.
+The token implements the SIP 10 standard.
 https://github.com/stacksgov/sips/pull/5
 
 This token standard implements the "Standard Trait Definition for Fungible Tokens."  This trait exposes functions for token metadata:
