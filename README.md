@@ -26,11 +26,19 @@
 [![GitHub pull requests by-label](https://img.shields.io/github/issues-pr-raw/wrappedfi/wrapped_token_stacks)](https://github.com/wrappedfi/wrapped_token_stacks/pulls)
 [![GitHub Issues](https://img.shields.io/github/issues-raw/wrappedfi/wrapped_token_stacks.svg)](https://github.com/wrappedfi/wrapped_token_stacks/issues)
 
+## Mainnet deployments
+
+### xBTC
+[SP3DX3H4FEYZJZ586MFBS25ZW3HZDMEW92260R2PR.Wrapped-Bitcoin](https://explorer.stacks.co/txid/SP3DX3H4FEYZJZ586MFBS25ZW3HZDMEW92260R2PR.Wrapped-Bitcoin?chain=mainnet)
+
+### xUSD
+[SP2TZK01NKDC89J6TA56SA47SDF7RTHYEQ79AAB9A.Wrapped-USD](https://explorer.stacks.co/txid/0xfe7848716ba423dfaf664a975771f75763720b0be8a0759a56b2d80a45692ca7?chain=mainnet)
 
 ## About
 
-The token implements the SIP 10 standard.
-https://github.com/stacksgov/sips/pull/5
+The token implements the [SIP 10 standard](https://github.com/stacksgov/sips/pull/5). It has been reviewed and audited by
+[NCC Group](https://research.nccgroup.com) and a copy of the report can be found
+[here](https://github.com/wrappedfi/wrapped_token_stacks/blob/main/ncc-security-audit.pdf).
 
 This token standard implements the "Standard Trait Definition for Fungible Tokens."  This trait exposes functions for token metadata:
 
