@@ -36,11 +36,9 @@
 
 ## About
 
-The token implements the [SIP 10 standard](https://github.com/stacksgov/sips/pull/5). It has been reviewed and audited by
-[NCC Group](https://research.nccgroup.com) and a copy of the report can be found
-[here](https://github.com/wrappedfi/wrapped_token_stacks/blob/main/ncc-security-audit.pdf).
+The token implements the [SIP 10 standard](https://github.com/stacksgov/sips/pull/5) and has been [reviewed and audited](https://github.com/wrappedfi/wrapped_token_stacks/blob/main/ncc-security-audit.pdf) by [NCC Group](https://www.nccgroup.com/).
 
-This token standard implements the "Standard Trait Definition for Fungible Tokens."  This trait exposes functions for token metadata:
+The SIP-10 standard is the "Standard Trait Definition for Fungible Tokens" on the [Stacks network](https://www.stacks.co/). This trait exposes functions for token metadata:
 
 * get-name
 * get-symbol
